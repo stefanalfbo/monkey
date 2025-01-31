@@ -19,3 +19,6 @@ vet: ## Report likely mistakes in source code.
 
 run: ## Run the REPL.
 	go run cmd/main.go
+
+staticcheck: ## Run staticcheck on the project.
+	staticcheck ./...
