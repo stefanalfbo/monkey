@@ -190,6 +190,41 @@ func TestIntegerLiteralExpression(t *testing.T) {
 	}
 }
 
+func TestBooleanExpression(t *testing.T) {
+	input := "true;"
+
+	l := lexer.New(input)
+	p := New(l)
+
+	program := p.ParseProgram()
+
+	checkParserErrors(t, p)
+
+	if len(program.Statements) != 1 {
+		t.Fatalf("program has not enough statements. got=%d", len(program.Statements))
+	}
+
+	statement, ok := program.Statements[0].(*ast.ExpressionStatement)
+
+	if !ok {
+		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T", program.Statements[0])
+	}
+
+	identifier, ok := statement.Expression.(*ast.Boolean)
+
+	if !ok {
+		t.Fatalf("expression not *ast.Identifier. got=%T", statement.Expression)
+	}
+
+	if identifier.Value != true {
+		t.Errorf("identifier.Value not %v. got=%v", true, identifier.Value)
+	}
+
+	if identifier.TokenLiteral() != "true" {
+		t.Errorf("identifier.TokenLiteral not %s. got=%s", "true", identifier.TokenLiteral())
+	}
+}
+
 func TestParsingPrefixExpressions(t *testing.T) {
 	prefixTests := []struct {
 		input        string
